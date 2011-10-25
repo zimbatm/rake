@@ -229,7 +229,7 @@ class TestRakeTask < Rake::TestCase
     task(:t3)
     out = t1.investigation
     assert_match(/class:\s*Rake::Task/, out)
-    assert_match(/needed:\s*true/, out)
+    assert_match(/needed:\s*always/, out)
     assert_match(/pre-requisites:\s*--t[23]/, out)
   end
 

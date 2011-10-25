@@ -181,7 +181,7 @@ module Rake
     def format_trace_flags
       flags = []
       flags << "first_time" unless @already_invoked
-      flags << "not_needed" unless needed?
+      flags << needed? || "not_needed"
       flags.empty? ? "" : "(" + flags.join(", ") + ")"
     end
     private :format_trace_flags
@@ -209,7 +209,7 @@ module Rake
 
     # Is this task needed?
     def needed?
-      true
+      :always
     end
 
     # Timestamp for this task.  Basic tasks return the current time for their

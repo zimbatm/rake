@@ -13,7 +13,7 @@ module Rake
     # Is this file task needed?  Yes if it doesn't exist, or if its time stamp
     # is out of date.
     def needed?
-      ! File.exist?(name) || out_of_date?(timestamp)
+      file_missing?(name) || out_of_date?(timestamp)
     end
 
     # Time stamp for file task.
@@ -27,9 +27,15 @@ module Rake
 
     private
 
+    def file_missing?(path)
+      File.exist?(path) ? nil : :file_missing
+    end
+
     # Are there any prerequisites with a later time than the given time stamp?
     def out_of_date?(stamp)
-      @prerequisites.any? { |n| application[n, @scope].timestamp > stamp}
+      early_childs = @prerequisites.select { |n| application[n, @scope].timestamp > stamp}
+      return if early_childs.empty?
+      early_childs.map{|n| [:early, n.to_s]}
     end
 
     # ----------------------------------------------------------------
